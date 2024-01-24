@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ESP32 Communication</title>
+    <script>
+        function sendData() {
+            // Get the value from the input field
+            var inputValue = document.getElementById("dataInput").value;
+
+            // Create a new XMLHttpRequest object
+            var xhr = new XMLHttpRequest();
+
+            // Define the request method, endpoint, and set the content type
+            xhr.open("POST", "https://your-api-endpoint.com", true);
+            xhr.setRequestHeader("Content-Type", "application/json");
+
+            // Set the callback function to handle the response
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    // Update the received data div with the response
+                    document.getElementById("receivedData").innerText = "Received Data: " + xhr.responseText;
+                }
+            };
+
+            // Prepare the data to be sent
+            var data = JSON.stringify({ "input_value": inputValue });
+
+            // Send the data
+            xhr.send(data);
+        }
+    </script>
+</head>
+<body>
+    <h1>ESP32 Communication</h1>
+    <label for="dataInput">Enter Data:</label>
+    <input type="text" id="dataInput" />
+    <button onclick="sendData()">Send Data</button>
+    <div id="receivedData"></div>
+</body>
+</html>
