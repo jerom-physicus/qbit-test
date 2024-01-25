@@ -3,40 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ESP32 Communication</title>
+    <title>ESP32 Data Sender</title>
+</head>
+<body>
+    <form id="dataForm">
+        <label for="input_data">Enter Data:</label>
+        <input type="text" id="input_data" name="input_data" required>
+        <button type="button" onclick="sendData()">Send Data</button>
+    </form>
+
     <script>
         function sendData() {
-            // Get the value from the input field
-            var inputValue = document.getElementById("dataInput").value;
+            var input_data = document.getElementById('input_data').value;
 
-            // Create a new XMLHttpRequest object
+            // Send data to the ESP32 using a simple HTTP request
             var xhr = new XMLHttpRequest();
+            xhr.open('GET', 'http://192.168.4.1/data?data=' + encodeURIComponent(input_data), true);
 
-            // Define the request method, endpoint, and set the content type
-            xhr.open("POST", "https://your-api-endpoint.com", true);
-            xhr.setRequestHeader("Content-Type", "application/json");
-
-            // Set the callback function to handle the response
-            xhr.onreadystatechange = function () {
-                if (xhr.readyState === 4 && xhr.status === 200) {
-                    // Update the received data div with the response
-                    document.getElementById("receivedData").innerText = "Received Data: " + xhr.responseText;
+            xhr.onload = function () {
+                if (xhr.status >= 200 && xhr.status < 300) {
+                    console.log('Success:', xhr.responseText);
+                    // You can add additional UI feedback here
+                } else {
+                    console.error('Error:', xhr.statusText);
                 }
             };
 
-            // Prepare the data to be sent
-            var data = JSON.stringify({ "input_value": inputValue });
-
-            // Send the data
-            xhr.send(data);
+            xhr.send();
         }
     </script>
-</head>
-<body>
-    <h1>ESP32 Communication</h1>
-    <label for="dataInput">Enter Data:</label>
-    <input type="text" id="dataInput" />
-    <button onclick="sendData()">Send Data</button>
-    <div id="receivedData"></div>
 </body>
 </html>
