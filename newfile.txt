@@ -1,1 +1,56 @@
-hello this is a sample commit
+import network
+import urequests
+import os
+
+# Function to connect to Wi-Fi
+def connect_wifi(ssid, password):
+    wlan = network.WLAN(network.STA_IF)
+    wlan.active(True)
+    wlan.connect(ssid, password)
+
+    # Wait for connection with a timeout
+    max_wait = 10
+    while max_wait > 0:
+        if wlan.isconnected():
+            print('Connected to Wi-Fi')
+            print(wlan.ifconfig())
+            return True
+        max_wait -= 1
+        print('Waiting for connection...')
+        time.sleep(1)
+    
+    print('Connection failed')
+    return False
+
+# Function to fetch and save a file from GitHub
+def fetch_and_save_file(url, save_path):
+    print("Fetching file from GitHub...")
+
+    try:
+        response = urequests.get(url)
+        if response.status_code == 200:
+            with open(save_path, 'w') as file:
+                file.write(response.text)
+            print("File saved successfully to:", save_path)
+        else:
+            print("Failed to fetch file. Status code:", response.status_code)
+    except Exception as e:
+        print("Error fetching file:", str(e))
+    finally:
+        response.close()
+
+# Replace with your Wi-Fi credentials
+ssid = 'your_wifi_ssid'
+password = 'your_wifi_password'
+
+# URL to fetch the raw file from GitHub
+# Example URL to a raw file: "https://raw.githubusercontent.com/user/repo/branch/filename"
+github_file_url = "https://raw.githubusercontent.com/jerom-physicus/qbit-test/main/index.html"
+
+# Path to save the file on ESP32
+save_path = "/index.html"
+
+# Connect to Wi-Fi
+if connect_wifi(ssid, password):
+    # Fetch and save the file
+    fetch_and_save_file(github_file_url, save_path)
