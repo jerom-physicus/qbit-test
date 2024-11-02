@@ -6,4 +6,5 @@ led = Pin(2, Pin.OUT)
 
 while True:
     led.on()
-    sleep(1)
+    sleep(1
+    )
