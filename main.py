@@ -14,7 +14,7 @@ V_REF = 3.3   # Reference voltage for ADC (3.3V for ESP32)
 ADC_MAX_VALUE = 4095  # 12-bit ADC
 
 # Current Sensor Configuration (ACS712)
-current_adc_pin = ADC(Pin(32))  # Adjust GPIO pin as needed
+current_adc_pin = ADC(Pin(33))  # Adjust GPIO pin as needed
 current_adc_pin.atten(ADC.ATTN_11DB)
 
 SENSITIVITY = 185  # Sensitivity in mV per A for ACS712-5A (use 100 for 20A, 66 for 30A)
