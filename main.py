@@ -2,7 +2,7 @@ from machine import Pin, ADC
 import time
 
 # Configure the ADC pin (e.g., GPIO 36 is ADC1_CH0 on the ESP32)
-adc = ADC(Pin(36))
+adc = ADC(Pin(23))
 adc.atten(ADC.ATTN_11DB)  # Set attenuation to read up to 3.3V
 
 # Constants for voltage calculation
