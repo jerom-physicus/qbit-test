@@ -4,7 +4,7 @@ import socket
 import time
 
 # Voltage Sensor Configuration
-voltage_adc_pin = ADC(Pin(33))  # Adjust GPIO pin as needed
+voltage_adc_pin = ADC(Pin(34))  # Adjust GPIO pin as needed
 voltage_adc_pin.atten(ADC.ATTN_11DB)  # Set attenuation to read up to 3.3V
 
 # Voltage Divider Resistor Values
@@ -105,6 +105,6 @@ while True:
     print("Got a connection from", addr)
     request = conn.recv(1024)
     response = web_page()
-    conn.send('HTTP/1.1 200 OK\nContent-Type: text/html\\nConnection: close\\n\\n')
+    conn.send('HTTP/1.1 200 OK\\nContent-Type: text/html\\nConnection: close\\n\\n')
     conn.sendall(response)
     conn.close()
