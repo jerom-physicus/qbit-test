@@ -78,6 +78,11 @@ def web_page():
             h2 {{ color: #333; }}
             p {{ font-size: 1.2em; }}
         </style>
+        <script>
+            setInterval(function() {{
+                location.reload();
+            }}, 2000);  // Refresh every 2 seconds
+        </script>
     </head>
     <body>
         <h2>ESP32 Voltage and Current Sensor</h2>
