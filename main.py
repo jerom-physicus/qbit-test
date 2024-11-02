@@ -1,34 +1,32 @@
 from machine import Pin, ADC
 import time
 
-# Define the analog input pin (e.g., GPIO 32)
-analog_in = ADC(Pin(32))
-analog_in.atten(ADC.ATTN_11DB)  # Set attenuation to read up to 3.3V (or 5V if supported)
+# Define the analog input pin (use a GPIO pin that supports ADC, e.g., GPIO 32)
+adc_pin = ADC(Pin(32))
+adc_pin.atten(ADC.ATTN_11DB)  # Set attenuation to measure up to 3.3V (or 5V if supported)
 
-# Resistor values in ohms
-R1 = 30000.0  # Resistor R1 (30k ohms)
-R2 = 7500.0   # Resistor R2 (7.5k ohms)
+# Constants for ACS712
+SENSITIVITY = 185  # mV per amp (use 100 for 20A model, 66 for 30A model)
+V_REF = 3.3        # Reference voltage for ADC (3.3V for ESP32)
+ADC_MAX_VALUE = 4095  # 12-bit ADC resolution (0-4095 for ESP32)
+V_ZERO = V_REF / 2   # Midpoint voltage (assuming no current)
 
-# Reference voltage (3.3V for ESP32 or adjust accordingly)
-ref_voltage = 3.3
-
-# Maximum ADC value for 12-bit resolution (4095)
-ADC_MAX_VALUE = 4095
-
-print("DC Voltage Test")
+def read_current():
+    # Read the raw ADC value
+    adc_value = adc_pin.read()
+    
+    # Convert ADC value to voltage
+    voltage = (adc_value / ADC_MAX_VALUE) * V_REF
+    
+    # Calculate current (voltage above/below V_ZERO indicates current direction)
+    current = (voltage - V_ZERO) * 1000 / SENSITIVITY  # Convert mV to A
+    
+    return current
 
 while True:
-    # Read the analog input value (0 to 4095 for 12-bit ADC resolution)
-    adc_value = analog_in.read()
+    # Read and print the current
+    current = read_current()
+    print("Current = {:.2f} A".format(current))
     
-    # Determine voltage at ADC input
-    adc_voltage = (adc_value * ref_voltage) / ADC_MAX_VALUE
-    
-    # Calculate voltage at divider input
-    in_voltage = adc_voltage / (R2 / (R1 + R2))
-    
-    # Print the calculated input voltage to 2 decimal places
-    print("Input Voltage = {:.2f} V".format(in_voltage))
-    
-    # Short delay
+    # Delay for a short period
     time.sleep(0.5)
