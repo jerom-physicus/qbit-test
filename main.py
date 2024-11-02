@@ -105,6 +105,6 @@ while True:
     print("Got a connection from", addr)
     request = conn.recv(1024)
     response = web_page()
-    conn.send('HTTP/1.1 200 OK\nContent-Type: text/html\\nConnection: close\n\n')
+    conn.send('HTTP/1.1 200 OK\nContent-Type: text/html\\nConnection: close\\n\\n')
     conn.sendall(response)
     conn.close()
